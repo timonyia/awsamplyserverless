@@ -1,0 +1,37 @@
+const AWS = require('aws-sdk');
+const S3 = new AWS.S3();
+const DynamoDB = new AWS.DynamoDB.DocumentClient();
+
+exports.handler = async (event) => {
+    try {
+        const { fileContent, fileName, user, title } = JSON.parse(event.body);
+
+        const s3Params = {
+            Bucket: 'your-s3-bucket-name',  // Replace with your S3 bucket name
+            Key: `${user}/${fileName}`,
+            Body: Buffer.from(fileContent, 'base64')
+        };
+        await S3.putObject(s3Params).promise();
+
+        const dbParams = {
+            TableName: 'DocumentMetadataTable',
+            Item: {
+                user,
+                title,
+                fileName,
+                s3Url: `https://your-s3-bucket-name.s3.amazonaws.com/${user}/${fileName}`
+            }
+        };
+        await DynamoDB.put(dbParams).promise();
+
+        return {
+            statusCode: 200,
+            body: JSON.stringify({ message: 'File uploaded successfully' })
+        };
+    } catch (error) {
+        return {
+            statusCode: 500,
+            body: JSON.stringify({ error: error.message })
+        };
+    }
+};
