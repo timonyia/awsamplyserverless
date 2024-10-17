@@ -1,0 +1,31 @@
+const AWS = require('aws-sdk');
+const S3 = new AWS.S3();
+
+exports.handler = async (event) => {
+    const { user, fileName } = JSON.parse(event.body);
+
+    const s3Params = {
+        Bucket: 'your-s3-bucket-name',
+        Key: `${user}/${fileName}`
+    };
+
+    try {
+        const file = await S3.getObject(s3Params).promise();
+        return {
+            statusCode: 200,
+            body: file.Body.toString('base64'),
+            isBase64Encoded: true
+        };
+           return {
+            statusCode: 200,
+            body: file.Body.toString('base64'), // Returns the file as a base64-encoded string
+            isBase64Encoded: true
+        };
+    } catch (error) {
+        return {
+            statusCode: 500,
+            body: JSON.stringify({ error: error.message })
+        };
+    }
+};
+
