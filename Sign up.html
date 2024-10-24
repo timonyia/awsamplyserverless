@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document Storage - Sign Up</title>
     <link rel="stylesheet" href="style.css"> <!-- Link to your CSS file -->
+
+    <!-- Add AWS Amplify CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aws-amplify/3.3.26/aws-amplify.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -16,6 +19,38 @@
         </form>
         <p id="signupMessage"></p> <!-- Display sign-up status -->
     </div>
-    <script src="script.js"></script> <!-- JavaScript for handling sign-up -->
+    
+    <!-- Custom script to handle sign-up -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Amplify.configure({
+                Auth: {
+                    region: 'your-region',  // Replace with your AWS region
+                    userPoolId: 'your-user-pool-id',  // Replace with your Cognito User Pool ID
+                    userPoolWebClientId: 'your-app-client-id'  // Replace with your App Client ID
+                }
+            });
+
+            // Sign Up Logic
+            const signupForm = document.getElementById('signupForm');
+            if (signupForm) {
+                signupForm.addEventListener('submit', async (event) => {
+                    event.preventDefault();
+                    const email = document.getElementById('signupEmail').value;
+                    const password = document.getElementById('signupPassword').value;
+
+                    try {
+                        const signupResponse = await Amplify.Auth.signUp({
+                            username: email,
+                            password: password
+                        });
+                        document.getElementById('signupMessage').textContent = 'Sign up successful! Please check your email to verify your account.';
+                    } catch (error) {
+                        document.getElementById('signupMessage').textContent = `Sign up failed: ${error.message}`;
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 </html>
