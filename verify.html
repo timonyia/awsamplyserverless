@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Verify Your Account</title>
     <link rel="stylesheet" href="style.css"> <!-- Link to your CSS file -->
+
+    <!-- Add AWS Amplify CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aws-amplify/3.3.26/aws-amplify.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -15,6 +18,35 @@
         </form>
         <p id="verificationMessage"></p> <!-- Display verification status -->
     </div>
-    <script src="script.js"></script> <!-- JavaScript for handling verification -->
+
+    <!-- Custom script to handle verification -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            Amplify.configure({
+                Auth: {
+                    region: 'your-region',  // Replace with your AWS region
+                    userPoolId: 'your-user-pool-id',  // Replace with your Cognito User Pool ID
+                    userPoolWebClientId: 'your-app-client-id'  // Replace with your App Client ID
+                }
+            });
+
+            // Verification Logic
+            const verificationForm = document.getElementById('verificationForm');
+            if (verificationForm) {
+                verificationForm.addEventListener('submit', async (event) => {
+                    event.preventDefault();
+                    const email = document.getElementById('signupEmail').value; // Use the email from sign-up
+                    const verificationCode = document.getElementById('verificationCode').value;
+
+                    try {
+                        await Amplify.Auth.confirmSignUp(email, verificationCode);
+                        document.getElementById('verificationMessage').textContent = 'Verification successful! You can now log in.';
+                    } catch (error) {
+                        document.getElementById('verificationMessage').textContent = `Verification failed: ${error.message}`;
+                    }
+                });
+            }
+        });
+    </script>
 </body>
 </html>
