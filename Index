@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Storage - Landing Page</title>
+    <link rel="stylesheet" href="style.css"> <!-- Reference to your CSS file -->
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to Document Storage</h1>
+        <div class="button-container">
+            <a href="login.html" class="button">Log In</a> <!-- Link to Login Page -->
+            <a href="signup.html" class="button">Sign Up</a> <!-- Link to Sign Up Page -->
+        </div>
+    </div>
+</body>
+</html>
