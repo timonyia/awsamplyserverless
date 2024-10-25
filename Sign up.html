@@ -6,7 +6,7 @@
     <title>Document Storage - Sign Up</title>
     <link rel="stylesheet" href="style.css"> <!-- Link to your CSS file -->
 
-    <!-- Add AWS Amplify CDN -->
+    <!-- Load AWS Amplify from CDN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aws-amplify/3.3.26/aws-amplify.min.js"></script>
 </head>
 <body>
@@ -19,10 +19,11 @@
         </form>
         <p id="signupMessage"></p> <!-- Display sign-up status -->
     </div>
-    
-    <!-- Custom script to handle sign-up -->
+
+    <!-- Custom script for handling sign-up, placed AFTER AWS Amplify is loaded -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Configure AWS Amplify with Cognito settings
             Amplify.configure({
                 Auth: {
                     region: 'your-region',  // Replace with your AWS region
