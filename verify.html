@@ -6,8 +6,8 @@
     <title>Verify Your Account</title>
     <link rel="stylesheet" href="style.css"> <!-- Link to your CSS file -->
 
-    <!-- Load AWS Amplify from the official AWS CDN -->
-    <script src="https://cdn.amplify.aws/libs/amplify/4.3.11/aws-amplify.min.js"></script>
+    <!-- Reference your locally downloaded AWS Amplify script -->
+    <script src="aws-amplify.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -36,11 +36,10 @@
             if (verificationForm) {
                 verificationForm.addEventListener('submit', async (event) => {
                     event.preventDefault();
-                    const email = document.getElementById('signupEmail').value; // Use the email from sign-up
                     const verificationCode = document.getElementById('verificationCode').value;
 
                     try {
-                        await Amplify.Auth.confirmSignUp(email, verificationCode);
+                        await Amplify.Auth.confirmSignUp('your-signup-email', verificationCode); // Use the correct email
                         document.getElementById('verificationMessage').textContent = 'Verification successful! You can now log in.';
                     } catch (error) {
                         document.getElementById('verificationMessage').textContent = `Verification failed: ${error.message}`;
