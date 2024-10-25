@@ -6,8 +6,8 @@
     <title>Verify Your Account</title>
     <link rel="stylesheet" href="style.css"> <!-- Link to your CSS file -->
 
-    <!-- Add AWS Amplify CDN -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/aws-amplify/3.3.26/aws-amplify.min.js"></script>
+    <!-- Load AWS Amplify from the official AWS CDN -->
+    <script src="https://cdn.amplify.aws/libs/amplify/4.3.11/aws-amplify.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -19,9 +19,10 @@
         <p id="verificationMessage"></p> <!-- Display verification status -->
     </div>
 
-    <!-- Custom script to handle verification -->
+    <!-- Custom script for handling verification -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Configure AWS Amplify
             Amplify.configure({
                 Auth: {
                     region: 'your-region',  // Replace with your AWS region
