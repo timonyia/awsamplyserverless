@@ -6,8 +6,8 @@
     <title>Document Storage - Sign Up</title>
     <link rel="stylesheet" href="style.css"> <!-- Link to your CSS file -->
 
-    <!-- Load AWS Amplify from CDN with "defer" to ensure it's loaded before the custom script -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/aws-amplify/3.3.26/aws-amplify.min.js" defer></script>
+    <!-- Load AWS Amplify from the official AWS CDN -->
+    <script src="https://cdn.amplify.aws/libs/amplify/4.3.11/aws-amplify.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -20,10 +20,10 @@
         <p id="signupMessage"></p> <!-- Display sign-up status -->
     </div>
 
-    <!-- Place the custom script at the end of the body -->
+    <!-- Custom script for handling sign-up -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Ensure Amplify is configured properly
+            // Configure AWS Amplify
             Amplify.configure({
                 Auth: {
                     region: 'your-region',  // Replace with your AWS region
