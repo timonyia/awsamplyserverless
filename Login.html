@@ -6,8 +6,8 @@
     <title>Document Storage - Log In</title>
     <link rel="stylesheet" href="style.css"> <!-- Link to your CSS file -->
 
-    <!-- Add AWS Amplify CDN -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/aws-amplify/3.3.26/aws-amplify.min.js"></script>
+    <!-- Load AWS Amplify from the official AWS CDN -->
+    <script src="https://cdn.amplify.aws/libs/amplify/4.3.11/aws-amplify.min.js"></script>
 </head>
 <body>
     <div class="container">
@@ -17,12 +17,13 @@
             <input type="password" id="password" placeholder="Password" required><br>
             <button type="submit" class="button">Log In</button>
         </form>
-        <p id="loginMessage"></p> <!-- Display log-in status -->
+        <p id="loginMessage"></p> <!-- Display login status -->
     </div>
 
-    <!-- Custom script to handle log-in -->
+    <!-- Custom script for handling login -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Configure AWS Amplify
             Amplify.configure({
                 Auth: {
                     region: 'your-region',  // Replace with your AWS region
