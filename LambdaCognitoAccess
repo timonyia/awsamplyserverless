@@ -1,0 +1,12 @@
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Effect": "Allow",
+            "Action": [
+                "cognito-idp:AdminGetUser"
+            ],
+            "Resource": "arn:aws:cognito-idp:your-region:your-account-id:userpool/your-userpool-id"
+        }
+    ]
+}
