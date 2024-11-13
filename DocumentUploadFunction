@@ -1,7 +1,7 @@
 const AWS = require('aws-sdk');
 const s3 = new AWS.S3();
 const dynamoDB = new AWS.DynamoDB.DocumentClient();
-const bucketName = process.env.BUCKET_NAME;
+const bucketName = process.env.BUCKET_NAME; // # Replace "process.env.BUCKET_NAME" with your S3 bucket name or set it as an environment variable
 
 exports.handler = async (event) => {
     const { user_id, document_title, document_content } = JSON.parse(event.body);
@@ -10,13 +10,13 @@ exports.handler = async (event) => {
     
     try {
         await s3.putObject({
-            Bucket: bucketName,
+            Bucket: bucketName, // # Ensure "bucketName" is set correctly to your S3 bucket name
             Key: key,
             Body: Buffer.from(document_content, 'base64')
         }).promise();
         
         await dynamoDB.put({
-            TableName: process.env.DYNAMO_TABLE_NAME,
+            TableName: process.env.DYNAMO_TABLE_NAME, // # Replace "process.env.DYNAMO_TABLE_NAME" with your DynamoDB table name or set it as an environment variable
             Item: {
                 user_id,
                 document_id,
