@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Storage - Sign Up</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="aws-amplify.min.js"></script>
+    <script>
+        // Configure AWS Amplify
+        Amplify.configure({
+            Auth: {
+                region: 'your-region', // e.g., 'us-east-1'
+                userPoolId: 'your-user-pool-id', // Cognito User Pool ID
+                userPoolWebClientId: 'your-app-client-id' // Cognito App Client ID
+            }
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>Sign Up</h1>
+        <form id="signupForm">
+            <input type="email" id="signupEmail" placeholder="Email" required><br>
+            <input type="password" id="signupPassword" placeholder="Password" required><br>
+            <button type="submit" class="button">Sign Up</button>
+        </form>
+        <p id="signupMessage"></p>
+    </div>
+
+    <script>
+        document.getElementById('signupForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            try {
+                await Amplify.Auth.signUp({
+                    username: email,
+                    password: password
+                });
+                document.getElementById('signupMessage').textContent = 'Sign-up successful! Check your email to verify your account.';
+            } catch (error) {
+                document.getElementById('signupMessage').textContent = `Error: ${error.message}`;
+            }
+        });
+    </script>
+</body>
+</html>
