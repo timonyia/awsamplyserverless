@@ -1,0 +1,32 @@
+const AWS = require('aws-sdk');
+const s3 = new AWS.S3();
+const dynamoDB = new AWS.DynamoDB.DocumentClient();
+const bucketName = process.env.BUCKET_NAME;
+
+exports.handler = async (event) => {
+    const { user_id, document_title, document_content } = JSON.parse(event.body);
+    const document_id = `${user_id}-${Date.now()}`;
+    const key = `${user_id}/${document_id}`;
+    
+    try {
+        await s3.putObject({
+            Bucket: bucketName,
+            Key: key,
+            Body: Buffer.from(document_content, 'base64')
+        }).promise();
+        
+        await dynamoDB.put({
+            TableName: process.env.DYNAMO_TABLE_NAME,
+            Item: {
+                user_id,
+                document_id,
+                document_title,
+                upload_date: new Date().toISOString()
+            }
+        }).promise();
+        
+        return { statusCode: 200, body: JSON.stringify({ message: 'Upload successful!' }) };
+    } catch (error) {
+        return { statusCode: 500, body: JSON.stringify({ message: 'Upload failed', error: error.message }) };
+    }
+};
