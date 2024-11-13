@@ -3,19 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Upload Document</title>
+    <title>Document Storage - Upload Document</title>
     <link rel="stylesheet" href="style.css">
+    <script src="aws-amplify.min.js"></script>
 </head>
 <body>
     <div class="container">
-        <h1>Upload Your Documents</h1>
-        <form id="uploadForm">
-            <input type="file" id="document" multiple required><br> <!-- Allow multiple files -->
-            <input type="text" id="title" placeholder="Document Title" required><br>
-            <button type="submit" class="button">Upload</button>
-        </form>
+        <h1>Upload Document</h1>
+        <input type="file" id="documentFile" multiple><br>
+        <button onclick="uploadDocument()">Upload Document</button>
         <p id="uploadMessage"></p>
     </div>
-    <script src="script.js"></script> <!-- JavaScript to handle upload -->
+
+    <script>
+        async function uploadDocument() {
+            const fileInput = document.getElementById('documentFile');
+            const files = fileInput.files;
+            if (!files.length) return alert('Please select a file.');
+            
+            for (const file of files) {
+                const reader = new FileReader();
+                reader.onload = async function () {
+                    const base64Content = reader.result.split(',')[1];
+                    try {
+                        await fetch('YOUR_UPLOAD_API_URL', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({
+                                user_id: (await Amplify.Auth.currentAuthenticatedUser()).username,
+                                document_title: file.name,
+                                document_content: base64Content
+                            })
+                        });
+                        document.getElementById('uploadMessage').textContent = 'Upload successful!';
+                    } catch (error) {
+                        document.getElementById('uploadMessage').textContent = `Error: ${error.message}`;
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
 </body>
 </html>
