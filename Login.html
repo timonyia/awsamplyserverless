@@ -4,49 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document Storage - Log In</title>
-    <link rel="stylesheet" href="style.css"> <!-- Link to your CSS file -->
-
-    <!-- Reference your locally downloaded AWS Amplify script -->
+    <link rel="stylesheet" href="style.css">
     <script src="aws-amplify.min.js"></script>
+    <script>
+        // Configure AWS Amplify
+        Amplify.configure({
+            Auth: {
+                region: 'your-region',
+                userPoolId: 'your-user-pool-id',
+                userPoolWebClientId: 'your-app-client-id'
+            }
+        });
+    </script>
 </head>
 <body>
     <div class="container">
         <h1>Log In</h1>
         <form id="loginForm">
-            <input type="email" id="email" placeholder="Email" required><br>
-            <input type="password" id="password" placeholder="Password" required><br>
+            <input type="email" id="loginEmail" placeholder="Email" required><br>
+            <input type="password" id="loginPassword" placeholder="Password" required><br>
             <button type="submit" class="button">Log In</button>
         </form>
-        <p id="loginMessage"></p> <!-- Display login status -->
+        <p id="loginMessage"></p>
     </div>
 
-    <!-- Custom script for handling log-in -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Configure AWS Amplify
-            Amplify.configure({
-                Auth: {
-                    region: 'your-region',  // Replace with your AWS region
-                    userPoolId: 'your-user-pool-id',  // Replace with your Cognito User Pool ID
-                    userPoolWebClientId: 'your-app-client-id'  // Replace with your App Client ID
-                }
-            });
-
-            // Log In Logic
-            const loginForm = document.getElementById('loginForm');
-            if (loginForm) {
-                loginForm.addEventListener('submit', async (event) => {
-                    event.preventDefault();
-                    const email = document.getElementById('email').value;
-                    const password = document.getElementById('password').value;
-
-                    try {
-                        const loginResponse = await Amplify.Auth.signIn(email, password);
-                        window.location.href = 'dashboard.html'; // Redirect to dashboard after successful login
-                    } catch (error) {
-                        document.getElementById('loginMessage').textContent = `Login failed: ${error.message}`;
-                    }
-                });
+        document.getElementById('loginForm').addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            try {
+                await Amplify.Auth.signIn(email, password);
+                window.location.href = 'dashboard.html';
+            } catch (error) {
+                document.getElementById('loginMessage').textContent = `Error: ${error.message}`;
             }
         });
     </script>
