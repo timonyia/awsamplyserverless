@@ -3,26 +3,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Search and Download Documents</title>
+    <title>Document Storage - Search Documents</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <div class="container">
-        <h1>Search Your Documents</h1>
-        <form id="searchForm">
-            <input type="text" id="searchTitle" placeholder="Document Title" required><br>
-            <button type="submit" class="button">Search</button>
-        </form>
-        <p id="searchMessage"></p>
-        <pre id="searchResults"></pre> <!-- Display search results here -->
-
-        <h2>Download Document</h2>
-        <form id="downloadForm">
-            <input type="text" id="fileName" placeholder="Document Name" required><br>
-            <button type="submit" class="button">Download</button>
-        </form>
-        <p id="downloadMessage"></p>
+        <h1>Search Documents</h1>
+        <input type="text" id="searchTitle" placeholder="Document Title"><br>
+        <button onclick="searchDocuments()">Search</button>
+        <ul id="documentList"></ul>
     </div>
-    <script src="script.js"></script> <!-- JavaScript to handle search and download -->
+
+    <script>
+        async function searchDocuments() {
+            const title = document.getElementById('searchTitle').value;
+            try {
+                const response = await fetch(`YOUR_SEARCH_API_URL?user_id=${(await Amplify.Auth.currentAuthenticatedUser()).username}&search_title=${title}`);
+                const documents = await response.json();
+                
+                const list = document.getElementById('documentList');
+                list.innerHTML = '';
+                documents.forEach(doc => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `${doc.document_title} <button onclick="downloadDocument('${doc.document_id}')">Download</button>`;
+                    list.appendChild(li);
+                });
+            } catch (error) {
+                console.error('Error:', error);
+            }
+        }
+
+        async function downloadDocument(documentId) {
+            const response = await fetch(`YOUR_DOWNLOAD_API_URL?user_id=${(await Amplify.Auth.currentAuthenticatedUser()).username}&document_id=${documentId}`);
+            const blob = await response.blob();
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = documentId;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+    </script>
 </body>
 </html>
