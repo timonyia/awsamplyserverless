@@ -1,11 +1,12 @@
 const AWS = require('aws-sdk');
 const dynamoDB = new AWS.DynamoDB.DocumentClient();
+const tableName = 'DocumentMetadata'; // Replace with your DynamoDB table name
 
 exports.handler = async (event) => {
     const { user_id, search_title } = event.queryStringParameters;
 
     const params = {
-        TableName: process.env.DYNAMO_TABLE_NAME, // # Replace "process.env.DYNAMO_TABLE_NAME" with your DynamoDB table name or set it as an environment variable
+        TableName: tableName,
         KeyConditionExpression: 'user_id = :user_id and begins_with(document_title, :title)',
         ExpressionAttributeValues: {
             ':user_id': user_id,
@@ -20,3 +21,4 @@ exports.handler = async (event) => {
         return { statusCode: 500, body: JSON.stringify({ message: 'Search failed', error: error.message }) };
     }
 };
+
